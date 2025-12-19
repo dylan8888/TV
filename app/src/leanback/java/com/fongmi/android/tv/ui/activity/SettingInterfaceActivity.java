@@ -17,7 +17,6 @@ public class SettingInterfaceActivity extends BaseActivity {
 
     private ActivitySettingInterfaceBinding mBinding;
     private String[] recommend;
-    private String[] size;
 
     public static void start(Activity activity) {
         activity.startActivity(new Intent(activity, SettingInterfaceActivity.class));
@@ -30,7 +29,7 @@ public class SettingInterfaceActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.select_size))[Setting.getSize()]);
+
         mBinding.recommendText
                 .setText((recommend = ResUtil.getStringArray(R.array.select_recommend))[Setting.getRecommend()]);
         mBinding.changeText.setText(getSwitch(Setting.isChange()));
@@ -38,16 +37,9 @@ public class SettingInterfaceActivity extends BaseActivity {
 
     @Override
     protected void initEvent() {
-        mBinding.size.setOnClickListener(this::setSize);
+
         mBinding.recommend.setOnClickListener(this::setRecommend);
         mBinding.change.setOnClickListener(this::setChange);
-    }
-
-    private void setSize(View view) {
-        int index = (Setting.getSize() + 1) % size.length;
-        mBinding.sizeText.setText(size[index]);
-        Setting.putSize(index);
-        RefreshEvent.size();
     }
 
     private void setRecommend(View view) {

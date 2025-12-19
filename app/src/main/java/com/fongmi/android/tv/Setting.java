@@ -130,7 +130,7 @@ public class Setting {
     }
 
     public static int getRecommend() {
-        return Prefers.getInt("recommend", 0);
+        return Prefers.getInt("recommend", 1);
     }
 
     public static void putRecommend(int recommend) {

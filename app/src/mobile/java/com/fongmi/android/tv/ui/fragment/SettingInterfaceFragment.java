@@ -19,7 +19,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 public class SettingInterfaceFragment extends BaseFragment {
 
     private FragmentSettingInterfaceBinding mBinding;
-    private String[] size;
+
     private String[] recommend;
 
     public static SettingInterfaceFragment newInstance() {
@@ -42,27 +42,16 @@ public class SettingInterfaceFragment extends BaseFragment {
 
     private void setOtherText() {
         mBinding.changeText.setText(getSwitch(Setting.isChange()));
-        mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.select_size))[Setting.getSize()]);
+
         mBinding.recommendText
                 .setText((recommend = ResUtil.getStringArray(R.array.select_recommend))[Setting.getRecommend()]);
     }
 
     @Override
     protected void initEvent() {
-        mBinding.size.setOnClickListener(this::setSize);
+
         mBinding.change.setOnClickListener(this::setChange);
         mBinding.recommend.setOnClickListener(this::setRecommend);
-    }
-
-    private void setSize(View view) {
-        new MaterialAlertDialogBuilder(requireActivity()).setTitle(R.string.setting_size)
-                .setNegativeButton(R.string.dialog_negative, null)
-                .setSingleChoiceItems(size, Setting.getSize(), (dialog, which) -> {
-                    mBinding.sizeText.setText(size[which]);
-                    Setting.putSize(which);
-                    RefreshEvent.size();
-                    dialog.dismiss();
-                }).show();
     }
 
     private void setChange(View view) {
