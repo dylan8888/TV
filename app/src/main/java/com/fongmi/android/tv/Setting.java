@@ -1,6 +1,5 @@
 package com.fongmi.android.tv;
 
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -128,6 +127,14 @@ public class Setting {
 
     public static void putSyncMode(int mode) {
         Prefers.put("sync_mode", mode);
+    }
+
+    public static int getRecommend() {
+        return Prefers.getInt("recommend", 0);
+    }
+
+    public static void putRecommend(int recommend) {
+        Prefers.put("recommend", recommend);
     }
 
     public static boolean isIncognito() {
@@ -291,6 +298,11 @@ public class Setting {
     }
 
     public static boolean hasFileManager() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && (new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + App.get().getPackageName())).resolveActivity(App.get().getPackageManager()) != null || new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION).resolveActivity(App.get().getPackageManager()) != null);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                && (new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                        Uri.parse("package:" + App.get().getPackageName()))
+                        .resolveActivity(App.get().getPackageManager()) != null
+                        || new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                                .resolveActivity(App.get().getPackageManager()) != null);
     }
 }

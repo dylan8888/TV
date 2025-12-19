@@ -73,6 +73,8 @@
     <string name="setting_live">直播</string>
     <string name="setting_wall">壁纸</string>
     <string name="setting_interface">界面设置</string>
+    <string name="setting_recommend">首页推荐</string>
+    <string name="setting_change">首页源切换</string>
     <string name="setting_player">播放设置</string>
     <string name="setting_incognito">无痕模式</string>
     <string name="setting_size">图片尺寸</string>
@@ -158,6 +160,11 @@
     <string name="none">无</string>
     <string name="times">倍</string>
     <string name="lines">行</string>
+
+    <string-array name="select_recommend">
+        <item>站点推荐</item>
+        <item>观看历史</item>
+    </string-array>
 
     <string-array name="select_decode">
         <item>软解</item>

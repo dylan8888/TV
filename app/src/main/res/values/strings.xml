@@ -74,6 +74,8 @@
     <string name="setting_live">Live</string>
     <string name="setting_wall">Wallpaper</string>
     <string name="setting_interface">Interface</string>
+    <string name="setting_recommend">Recommend</string>
+    <string name="setting_change">Source switch</string>
     <string name="setting_player">Player setting</string>
     <string name="setting_incognito">Incognito mode</string>
     <string name="setting_size">Image size</string>
@@ -159,6 +161,11 @@
     <string name="none">None</string>
     <string name="times">times</string>
     <string name="lines">lines</string>
+
+    <string-array name="select_recommend">
+        <item>Site</item>
+        <item>History</item>
+    </string-array>
 
     <string-array name="select_decode">
         <item>Soft</item>
