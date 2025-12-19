@@ -36,6 +36,7 @@ import com.fongmi.android.tv.service.PlaybackService;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.custom.FragmentStateManager;
 import com.fongmi.android.tv.ui.fragment.SettingFragment;
+import com.fongmi.android.tv.ui.fragment.SettingInterfaceFragment;
 import com.fongmi.android.tv.ui.fragment.SettingPlayerFragment;
 import com.fongmi.android.tv.ui.fragment.VodFragment;
 import com.fongmi.android.tv.utils.FileChooser;
@@ -105,13 +106,19 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         mManager = new FragmentStateManager(mBinding.container, getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                if (position == 0) return VodFragment.newInstance();
-                if (position == 1) return SettingFragment.newInstance();
-                if (position == 2) return SettingPlayerFragment.newInstance();
+                if (position == 0)
+                    return VodFragment.newInstance();
+                if (position == 1)
+                    return SettingFragment.newInstance();
+                if (position == 2)
+                    return SettingPlayerFragment.newInstance();
+                if (position == 3)
+                    return SettingInterfaceFragment.newInstance();
                 return null;
             }
         };
-        if (savedInstanceState == null) mManager.change(0);
+        if (savedInstanceState == null)
+            mManager.change(0);
     }
 
     private void initConfig() {
@@ -165,8 +172,13 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     }
 
     private boolean addShortcut(View view) {
-        ShortcutInfoCompat info = new ShortcutInfoCompat.Builder(this, getString(R.string.nav_live)).setIcon(IconCompat.createWithResource(this, R.mipmap.ic_launcher)).setIntent(new Intent(Intent.ACTION_VIEW, null, this, LiveActivity.class)).setShortLabel(getString(R.string.nav_live)).build();
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ShortcutReceiver.class).setAction(ShortcutReceiver.ACTION), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        ShortcutInfoCompat info = new ShortcutInfoCompat.Builder(this, getString(R.string.nav_live))
+                .setIcon(IconCompat.createWithResource(this, R.mipmap.ic_launcher))
+                .setIntent(new Intent(Intent.ACTION_VIEW, null, this, LiveActivity.class))
+                .setShortLabel(getString(R.string.nav_live)).build();
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+                new Intent(this, ShortcutReceiver.class).setAction(ShortcutReceiver.ACTION),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         ShortcutManagerCompat.requestPinShortcut(this, info, pendingIntent.getIntentSender());
         return true;
     }
@@ -177,21 +189,27 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshEvent(RefreshEvent event) {
-        if (event.getType().equals(RefreshEvent.Type.CONFIG)) setNavigation();
+        if (event.getType().equals(RefreshEvent.Type.CONFIG))
+            setNavigation();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onServerEvent(ServerEvent event) {
-        if (event.getType() != ServerEvent.Type.PUSH) return;
+        if (event.getType() != ServerEvent.Type.PUSH)
+            return;
         VideoActivity.push(this, event.getText());
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (mBinding.navigation.getSelectedItemId() == item.getItemId()) return false;
-        if (item.getItemId() == R.id.setting) return mManager.change(1);
-        if (item.getItemId() == R.id.vod) return mManager.change(0);
-        if (item.getItemId() == R.id.live) return openLive();
+        if (mBinding.navigation.getSelectedItemId() == item.getItemId())
+            return false;
+        if (item.getItemId() == R.id.setting)
+            return mManager.change(1);
+        if (item.getItemId() == R.id.vod)
+            return mManager.change(0);
+        if (item.getItemId() == R.id.live)
+            return openLive();
         return false;
     }
 
@@ -212,13 +230,15 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     protected void onBackInvoked() {
         if (!mBinding.navigation.getMenu().findItem(R.id.vod).isVisible()) {
             setNavigation();
-        } else if (mManager.isVisible(2)) {
+        } else if (mManager.isVisible(2) || mManager.isVisible(3)) {
             change(1);
         } else if (mManager.isVisible(1)) {
             mBinding.navigation.setSelectedItemId(R.id.vod);
         } else if (mManager.canBack(0)) {
-            if (PlaybackService.isRunning()) moveTaskToBack(true);
-            else super.onBackInvoked();
+            if (PlaybackService.isRunning())
+                moveTaskToBack(true);
+            else
+                super.onBackInvoked();
         }
     }
 

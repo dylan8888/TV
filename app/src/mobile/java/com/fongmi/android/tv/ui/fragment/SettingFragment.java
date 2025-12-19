@@ -56,7 +56,7 @@ import java.util.List;
 public class SettingFragment extends BaseFragment implements ConfigCallback, SiteCallback, LiveCallback {
 
     private FragmentSettingBinding mBinding;
-    private String[] size;
+
     private int type;
 
     public static SettingFragment newInstance() {
@@ -73,7 +73,8 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
 
     private String[] getDohList() {
         List<String> list = new ArrayList<>();
-        for (Doh item : VodConfig.get().getDoh()) list.add(item.getName());
+        for (Doh item : VodConfig.get().getDoh())
+            list.add(item.getName());
         return list.toArray(new String[0]);
     }
 
@@ -100,7 +101,7 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
     private void setOtherText() {
         mBinding.dohText.setText(getDohList()[getDohIndex()]);
         mBinding.incognitoText.setText(getSwitch(Setting.isIncognito()));
-        mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.select_size))[Setting.getSize()]);
+
     }
 
     private void setCacheText() {
@@ -118,10 +119,10 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
         mBinding.doh.setOnClickListener(this::setDoh);
         mBinding.live.setOnClickListener(this::onLive);
         mBinding.wall.setOnClickListener(this::onWall);
-        mBinding.size.setOnClickListener(this::setSize);
         mBinding.cache.setOnClickListener(this::onCache);
         mBinding.backup.setOnClickListener(this::onBackup);
         mBinding.player.setOnClickListener(this::onPlayer);
+        mBinding.interfaceSetting.setOnClickListener(this::onInterfaceSetting);
         mBinding.restore.setOnClickListener(this::onRestore);
         mBinding.version.setOnClickListener(this::onVersion);
         mBinding.vod.setOnLongClickListener(this::onVodEdit);
@@ -190,7 +191,8 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
         setCacheText();
         Notify.dismiss();
         RefreshEvent.config();
-        if (type == 0) RefreshEvent.video();
+        if (type == 0)
+            RefreshEvent.video();
     }
 
     @Override
@@ -251,6 +253,10 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
         getRoot().change(2);
     }
 
+    private void onInterfaceSetting(View view) {
+        getRoot().change(3);
+    }
+
     private void onVersion(View view) {
         Updater.create().force().start(requireActivity());
     }
@@ -275,20 +281,13 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
         mBinding.incognitoText.setText(getSwitch(Setting.isIncognito()));
     }
 
-    private void setSize(View view) {
-        new MaterialAlertDialogBuilder(requireActivity()).setTitle(R.string.setting_size).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(size, Setting.getSize(), (dialog, which) -> {
-            mBinding.sizeText.setText(size[which]);
-            Setting.putSize(which);
-            RefreshEvent.size();
-            dialog.dismiss();
-        }).show();
-    }
-
     private void setDoh(View view) {
-        new MaterialAlertDialogBuilder(requireActivity()).setTitle(R.string.setting_doh).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(getDohList(), getDohIndex(), (dialog, which) -> {
-            setDoh(VodConfig.get().getDoh().get(which));
-            dialog.dismiss();
-        }).show();
+        new MaterialAlertDialogBuilder(requireActivity()).setTitle(R.string.setting_doh)
+                .setNegativeButton(R.string.dialog_negative, null)
+                .setSingleChoiceItems(getDohList(), getDohIndex(), (dialog, which) -> {
+                    setDoh(VodConfig.get().getDoh().get(which));
+                    dialog.dismiss();
+                }).show();
     }
 
     private void setDoh(Doh doh) {
@@ -344,7 +343,8 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshEvent(RefreshEvent event) {
-        if (event.getType() != RefreshEvent.Type.CONFIG) return;
+        if (event.getType() != RefreshEvent.Type.CONFIG)
+            return;
         mBinding.vodUrl.setText(VodConfig.getDesc());
         mBinding.liveUrl.setText(LiveConfig.getDesc());
         mBinding.wallUrl.setText(WallConfig.getDesc());
@@ -352,7 +352,8 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if (hidden) return;
+        if (hidden)
+            return;
         setCacheText();
     }
 
@@ -362,8 +363,13 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
         EventBus.getDefault().unregister(this);
     }
 
-    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null || result.getData().getData() == null) return;
-        setConfig(Config.find("file:/" + FileChooser.getPathFromUri(result.getData().getData()).replace(Path.rootPath(), ""), type));
-    });
+    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null
+                        || result.getData().getData() == null)
+                    return;
+                setConfig(Config.find(
+                        "file:/" + FileChooser.getPathFromUri(result.getData().getData()).replace(Path.rootPath(), ""),
+                        type));
+            });
 }
