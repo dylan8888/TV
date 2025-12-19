@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:navigationIcon="@drawable/ic_back"
+        app:navigationIcon="@drawable/ic_control_back"
         app:navigationIconTint="@android:color/white"
         app:title="@string/setting_interface"
         app:titleTextAppearance="@style/ToolbarTextAppearance" />
