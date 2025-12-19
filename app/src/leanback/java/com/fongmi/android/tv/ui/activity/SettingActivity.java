@@ -68,7 +68,8 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
 
     private String[] getDohList() {
         List<String> list = new ArrayList<>();
-        for (Doh item : VodConfig.get().getDoh()) list.add(item.getName());
+        for (Doh item : VodConfig.get().getDoh())
+            list.add(item.getName());
         return list.toArray(new String[0]);
     }
 
@@ -91,7 +92,6 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
     private void setOtherText() {
         mBinding.dohText.setText(getDohList()[getDohIndex()]);
         mBinding.incognitoText.setText(getSwitch(Setting.isIncognito()));
-        mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.select_size))[Setting.getSize()]);
     }
 
     private void setCacheText() {
@@ -109,10 +109,10 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
         mBinding.doh.setOnClickListener(this::setDoh);
         mBinding.live.setOnClickListener(this::onLive);
         mBinding.wall.setOnClickListener(this::onWall);
-        mBinding.size.setOnClickListener(this::setSize);
         mBinding.cache.setOnClickListener(this::onCache);
         mBinding.backup.setOnClickListener(this::onBackup);
         mBinding.player.setOnClickListener(this::onPlayer);
+        mBinding.interfaceSetting.setOnClickListener(this::onInterfaceSetting);
         mBinding.restore.setOnClickListener(this::onRestore);
         mBinding.version.setOnClickListener(this::onVersion);
         mBinding.vod.setOnLongClickListener(this::onVodEdit);
@@ -181,7 +181,8 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
         setCacheText();
         Notify.dismiss();
         RefreshEvent.config();
-        if (type != 0) return;
+        if (type != 0)
+            return;
         RefreshEvent.video();
         RefreshEvent.history();
     }
@@ -244,6 +245,10 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
         SettingPlayerActivity.start(this);
     }
 
+    private void onInterfaceSetting(View view) {
+        SettingInterfaceActivity.start(this);
+    }
+
     private void onVersion(View view) {
         Updater.create().force().start(this);
     }
@@ -266,13 +271,6 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
     private void setIncognito(View view) {
         Setting.putIncognito(!Setting.isIncognito());
         mBinding.incognitoText.setText(getSwitch(Setting.isIncognito()));
-    }
-
-    private void setSize(View view) {
-        int index = (Setting.getSize() + 1) % size.length;
-        mBinding.sizeText.setText(size[index]);
-        Setting.putSize(index);
-        RefreshEvent.size();
     }
 
     private void setDoh(View view) {
@@ -333,14 +331,20 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshEvent(RefreshEvent event) {
-        if (event.getType() != RefreshEvent.Type.CONFIG) return;
+        if (event.getType() != RefreshEvent.Type.CONFIG)
+            return;
         mBinding.vodUrl.setText(VodConfig.getDesc());
         mBinding.liveUrl.setText(LiveConfig.getDesc());
         mBinding.wallUrl.setText(WallConfig.getDesc());
     }
 
-    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() != RESULT_OK || result.getData() == null || result.getData().getData() == null) return;
-        setConfig(Config.find("file:/" + FileChooser.getPathFromUri(result.getData().getData()).replace(Path.rootPath(), ""), type));
-    });
+    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() != RESULT_OK || result.getData() == null
+                        || result.getData().getData() == null)
+                    return;
+                setConfig(Config.find(
+                        "file:/" + FileChooser.getPathFromUri(result.getData().getData()).replace(Path.rootPath(), ""),
+                        type));
+            });
 }
