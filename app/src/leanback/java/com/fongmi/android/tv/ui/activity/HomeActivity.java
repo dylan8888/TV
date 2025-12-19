@@ -279,7 +279,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     private void setFunc() {
         List<Func> items = new ArrayList<>();
         items.add(Func.create(R.string.home_vod));
-        if (LiveConfig.hasUrl())
+        if (LiveConfig.hasUrl() && Setting.isLive())
             items.add(Func.create(R.string.home_live));
         items.add(Func.create(R.string.home_search));
         items.add(Func.create(R.string.home_keep));
@@ -461,6 +461,8 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     @Override
     public void showDialog() {
+        if (!Setting.isChange())
+            return;
         SiteDialog.create(this).show();
     }
 

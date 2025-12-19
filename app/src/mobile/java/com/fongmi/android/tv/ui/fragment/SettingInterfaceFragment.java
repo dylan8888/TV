@@ -45,6 +45,7 @@ public class SettingInterfaceFragment extends BaseFragment {
 
         mBinding.recommendText
                 .setText((recommend = ResUtil.getStringArray(R.array.select_recommend))[Setting.getRecommend()]);
+        mBinding.liveText.setText(getSwitch(Setting.isLive()));
     }
 
     @Override
@@ -52,11 +53,18 @@ public class SettingInterfaceFragment extends BaseFragment {
 
         mBinding.change.setOnClickListener(this::setChange);
         mBinding.recommend.setOnClickListener(this::setRecommend);
+        mBinding.live.setOnClickListener(this::setLive);
     }
 
     private void setChange(View view) {
         Setting.putChange(!Setting.isChange());
         mBinding.changeText.setText(getSwitch(Setting.isChange()));
+    }
+
+    private void setLive(View view) {
+        Setting.putLive(!Setting.isLive());
+        mBinding.liveText.setText(getSwitch(Setting.isLive()));
+        RefreshEvent.config();
     }
 
     private void setRecommend(View view) {

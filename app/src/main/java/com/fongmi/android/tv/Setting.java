@@ -177,6 +177,14 @@ public class Setting {
         Prefers.put("change", change);
     }
 
+    public static boolean isLive() {
+        return Prefers.getBoolean("live", true);
+    }
+
+    public static void putLive(boolean live) {
+        Prefers.put("live", live);
+    }
+
     public static boolean getUpdate() {
         return Prefers.getBoolean("update", true);
     }

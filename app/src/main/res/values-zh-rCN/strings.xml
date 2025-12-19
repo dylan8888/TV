@@ -75,6 +75,7 @@
     <string name="setting_interface">界面设置</string>
     <string name="setting_recommend">首页推荐</string>
     <string name="setting_change">首页源切换</string>
+    <string name="setting_live">直播菜单</string>
     <string name="setting_player">播放设置</string>
     <string name="setting_incognito">无痕模式</string>
     <string name="setting_size">图片尺寸</string>
@@ -163,7 +164,7 @@
 
     <string-array name="select_recommend">
         <item>站点推荐</item>
-        <item>观看历史</item>
+        <item>最近观看</item>
     </string-array>
 
     <string-array name="select_decode">

@@ -33,6 +33,7 @@ public class SettingInterfaceActivity extends BaseActivity {
         mBinding.recommendText
                 .setText((recommend = ResUtil.getStringArray(R.array.select_recommend))[Setting.getRecommend()]);
         mBinding.changeText.setText(getSwitch(Setting.isChange()));
+        mBinding.liveText.setText(getSwitch(Setting.isLive()));
     }
 
     @Override
@@ -40,6 +41,7 @@ public class SettingInterfaceActivity extends BaseActivity {
 
         mBinding.recommend.setOnClickListener(this::setRecommend);
         mBinding.change.setOnClickListener(this::setChange);
+        mBinding.live.setOnClickListener(this::setLive);
     }
 
     private void setRecommend(View view) {
@@ -51,6 +53,12 @@ public class SettingInterfaceActivity extends BaseActivity {
     private void setChange(View view) {
         Setting.putChange(!Setting.isChange());
         mBinding.changeText.setText(getSwitch(Setting.isChange()));
+    }
+
+    private void setLive(View view) {
+        Setting.putLive(!Setting.isLive());
+        mBinding.liveText.setText(getSwitch(Setting.isLive()));
+        RefreshEvent.config();
     }
 
     private String getSwitch(boolean value) {
