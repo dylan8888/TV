@@ -155,6 +155,10 @@
     <!-- Hint -->
     <string name="copied">已复制</string>
 
+    <!-- Home -->
+    <string name="home_history">最近观看</string>
+    <string name="vod_home">推荐</string>
+
     <!-- UNIT -->
     <string name="all">全部</string>
     <string name="none">无</string>

@@ -156,6 +156,10 @@
     <!-- Hint -->
     <string name="copied">Copied</string>
 
+    <!-- Home -->
+    <string name="home_history">Recent</string>
+    <string name="vod_home">Recommend</string>
+
     <!-- UNIT -->
     <string name="all">All</string>
     <string name="none">None</string>
