@@ -116,7 +116,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         mResult = Result.empty();
         mClock = Clock.create(mBinding.clock);
         mBinding.progressLayout.showProgress();
-        Updater.create().start(this);
+        // Updater.create().start(this);  // 已屏蔽自动升级检查
         setRecyclerView();
         setViewModel();
         setAdapter();
