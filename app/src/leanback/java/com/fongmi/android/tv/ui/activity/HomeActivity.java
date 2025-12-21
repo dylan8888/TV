@@ -23,7 +23,6 @@ import androidx.viewbinding.ViewBinding;
 import com.fongmi.android.tv.App;
 import com.fongmi.android.tv.Product;
 import com.fongmi.android.tv.R;
-import com.fongmi.android.tv.Setting;
 import com.fongmi.android.tv.Updater;
 import com.fongmi.android.tv.api.config.LiveConfig;
 import com.fongmi.android.tv.api.config.VodConfig;
@@ -76,8 +75,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class HomeActivity extends BaseActivity implements CustomTitleView.Listener, VodPresenter.OnClickListener,
-        FuncPresenter.OnClickListener, HistoryPresenter.OnClickListener {
+public class HomeActivity extends BaseActivity implements CustomTitleView.Listener, VodPresenter.OnClickListener, FuncPresenter.OnClickListener, HistoryPresenter.OnClickListener {
 
     private ActivityHomeBinding mBinding;
     private ArrayObjectAdapter mHistoryAdapter;
@@ -132,11 +130,9 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         mBinding.title.setListener(this);
         mBinding.recycler.addOnChildViewHolderSelectedListener(new OnChildViewHolderSelectedListener() {
             @Override
-            public void onChildViewHolderSelected(@NonNull RecyclerView parent, @Nullable RecyclerView.ViewHolder child,
-                    int position, int subposition) {
+            public void onChildViewHolderSelected(@NonNull RecyclerView parent, @Nullable RecyclerView.ViewHolder child, int position, int subposition) {
                 mBinding.toolbar.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
-                if (mPresenter.isDelete())
-                    setHistoryDelete(false);
+                if (mPresenter.isDelete()) setHistoryDelete(false);
             }
         });
     }
@@ -165,9 +161,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         selector.addPresenter(Vod.class, new VodPresenter(this, Style.list()));
         selector.addPresenter(ListRow.class, new CustomRowPresenter(16), VodPresenter.class);
         selector.addPresenter(ListRow.class, new CustomRowPresenter(16), FuncPresenter.class);
-        selector.addPresenter(ListRow.class,
-                new CustomRowPresenter(16, FocusHighlight.ZOOM_FACTOR_SMALL, HorizontalGridView.FOCUS_SCROLL_ALIGNED),
-                HistoryPresenter.class);
+        selector.addPresenter(ListRow.class, new CustomRowPresenter(16, FocusHighlight.ZOOM_FACTOR_SMALL, HorizontalGridView.FOCUS_SCROLL_ALIGNED), HistoryPresenter.class);
         mBinding.recycler.setAdapter(new ItemBridgeAdapter(mAdapter = new ArrayObjectAdapter(selector)));
         mBinding.recycler.setVerticalSpacing(ResUtil.dp2px(16));
     }
@@ -183,10 +177,8 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     private void setAdapter() {
         mHistoryAdapter = new ArrayObjectAdapter(mPresenter = new HistoryPresenter(this));
         mAdapter.add(new ListRow(mFuncAdapter = new ArrayObjectAdapter(new FuncPresenter(this))));
-        if (Setting.getRecommend() == 1)
-            mAdapter.add(R.string.home_history);
-        else
-            mAdapter.add(R.string.home_recommend);
+        mAdapter.add(R.string.home_history);
+        mAdapter.add(R.string.home_recommend);
     }
 
     private void setTitle() {
@@ -243,8 +235,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     private void setFocus() {
         mBinding.title.setSelected(true);
         App.post(() -> mBinding.title.setFocusable(true), 500);
-        if (!mBinding.title.hasFocus())
-            mBinding.recycler.requestFocus();
+        if (!mBinding.title.hasFocus()) mBinding.recycler.requestFocus();
     }
 
     private void getVideo() {
@@ -253,19 +244,15 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         int index = getRecommendIndex();
         boolean gone = mAdapter.indexOf("progress") == -1;
         boolean hasItem = gone && mAdapter.size() > index;
-        if (hasItem)
-            mAdapter.removeItems(index, mAdapter.size() - index);
-        if (gone)
-            mAdapter.add("progress");
+        if (hasItem) mAdapter.removeItems(index, mAdapter.size() - index);
+        if (gone) mAdapter.add("progress");
         mViewModel.homeContent();
     }
 
     private void addVideo(Result result) {
         Style style = result.getStyle(getHome().getStyle());
-        if (style.isList())
-            mAdapter.addAll(mAdapter.size(), result.getList());
-        else
-            addGrid(result.getList(), style);
+        if (style.isList()) mAdapter.addAll(mAdapter.size(), result.getList());
+        else addGrid(result.getList(), style);
     }
 
     private void addGrid(List<Vod> items, Style style) {
@@ -279,8 +266,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     private void setFunc() {
         List<Func> items = new ArrayList<>();
         items.add(Func.create(R.string.home_vod));
-        if (LiveConfig.hasUrl() && Setting.isLive())
-            items.add(Func.create(R.string.home_live));
+        if (LiveConfig.hasUrl()) items.add(Func.create(R.string.home_live));
         items.add(Func.create(R.string.home_search));
         items.add(Func.create(R.string.home_keep));
         items.add(Func.create(R.string.home_push));
@@ -298,12 +284,9 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         int historyIndex = getHistoryIndex();
         int recommendIndex = getRecommendIndex();
         boolean exist = recommendIndex - historyIndex == 2;
-        if (renew)
-            mHistoryAdapter = new ArrayObjectAdapter(mPresenter = new HistoryPresenter(this));
-        if ((items.isEmpty() && exist) || (renew && exist))
-            mAdapter.removeItems(historyIndex, 1);
-        if ((!items.isEmpty() && !exist) || (renew && exist))
-            mAdapter.add(historyIndex, new ListRow(mHistoryAdapter));
+        if (renew) mHistoryAdapter = new ArrayObjectAdapter(mPresenter = new HistoryPresenter(this));
+        if ((items.isEmpty() && exist) || (renew && exist)) mAdapter.removeItems(historyIndex, 1);
+        if ((!items.isEmpty() && !exist) || (renew && exist)) mAdapter.add(historyIndex, new ListRow(mHistoryAdapter));
         mHistoryAdapter.setItems(items, new BaseDiffCallback<History>());
     }
 
@@ -320,13 +303,11 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     }
 
     private int getHistoryIndex() {
-        int index = mAdapter.indexOf(R.string.home_history);
-        return index == -1 ? -1 : index + 1;
+        return mAdapter.indexOf(R.string.home_history) + 1;
     }
 
     private int getRecommendIndex() {
-        int index = mAdapter.indexOf(R.string.home_recommend);
-        return index == -1 ? -1 : index + 1;
+        return mAdapter.indexOf(R.string.home_recommend) + 1;
     }
 
     private void setLogo() {
@@ -420,18 +401,14 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     @Override
     public void onItemClick(Vod item) {
-        if (item.isAction())
-            mViewModel.action(getHome().getKey(), item.getAction());
-        else if (getHome().isIndex())
-            CollectActivity.start(this, item.getName());
-        else
-            VideoActivity.start(this, getHome().getKey(), item.getId(), item.getName(), item.getPic());
+        if (item.isAction()) mViewModel.action(getHome().getKey(), item.getAction());
+        else if (getHome().isIndex()) CollectActivity.start(this, item.getName());
+        else VideoActivity.start(this, getHome().getKey(), item.getId(), item.getName(), item.getPic());
     }
 
     @Override
     public boolean onLongClick(Vod item) {
-        if (item.isAction())
-            return false;
+        if (item.isAction()) return false;
         CollectActivity.start(this, item.getName());
         return true;
     }
@@ -444,25 +421,20 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     @Override
     public void onItemDelete(History item) {
         mHistoryAdapter.remove(item.delete());
-        if (mHistoryAdapter.size() > 0)
-            return;
+        if (mHistoryAdapter.size() > 0) return;
         mAdapter.removeItems(getHistoryIndex(), 1);
         mPresenter.setDelete(false);
     }
 
     @Override
     public boolean onLongClick() {
-        if (mPresenter.isDelete())
-            clearHistory();
-        else
-            setHistoryDelete(true);
+        if (mPresenter.isDelete()) clearHistory();
+        else setHistoryDelete(true);
         return true;
     }
 
     @Override
     public void showDialog() {
-        if (!Setting.isChange())
-            return;
         SiteDialog.create(this).show();
     }
 
@@ -479,10 +451,8 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (KeyUtil.isMenuKey(event))
-            showDialog();
-        if (KeyUtil.isActionDown(event) & KeyUtil.isDownKey(event) && getCurrentFocus() == mBinding.title)
-            return mBinding.recycler.getChildAt(0).requestFocus();
+        if (KeyUtil.isMenuKey(event)) showDialog();
+        if (KeyUtil.isActionDown(event) & KeyUtil.isDownKey(event) && getCurrentFocus() == mBinding.title) return mBinding.recycler.getChildAt(0).requestFocus();
         return super.dispatchKeyEvent(event);
     }
 
@@ -507,10 +477,8 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         } else if (mBinding.recycler.getSelectedPosition() != 0) {
             mBinding.recycler.scrollToPosition(0);
         } else {
-            if (PlaybackService.isRunning())
-                moveTaskToBack(true);
-            else
-                super.onBackInvoked();
+            if (PlaybackService.isRunning()) moveTaskToBack(true);
+            else super.onBackInvoked();
         }
     }
 
