@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fongmi.android.tv.R;
+import com.fongmi.android.tv.Setting;
 import com.fongmi.android.tv.bean.Class;
 import com.fongmi.android.tv.bean.Result;
 import com.fongmi.android.tv.databinding.AdapterTypeBinding;
@@ -44,7 +45,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
 
     public void addAll(Result result) {
         mItems.addAll(result.getTypes());
-        if (!result.getList().isEmpty()) mItems.add(0, home());
+        if (!result.getList().isEmpty() && Setting.getRecommend() == 0) mItems.add(0, home());
         if (!mItems.isEmpty()) mItems.get(0).setActivated(true);
         notifyDataSetChanged();
     }

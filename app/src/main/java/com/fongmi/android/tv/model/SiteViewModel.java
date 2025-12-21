@@ -87,7 +87,7 @@ public class SiteViewModel extends ViewModel {
                 Spider spider = site.recent().spider();
                 boolean crash = Prefers.getBoolean("crash");
                 String homeContent = crash ? "" : spider.homeContent(true);
-                String homeVideoContent = crash ? "" : spider.homeVideoContent();
+                String homeVideoContent = crash || com.fongmi.android.tv.Setting.getRecommend() != 0 ? "" : spider.homeVideoContent();
                 Prefers.put("crash", false);
                 SpiderDebug.log("home", homeContent);
                 SpiderDebug.log("homeVideo", homeVideoContent);
