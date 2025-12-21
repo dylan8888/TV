@@ -73,6 +73,7 @@ public class SettingInterfaceFragment extends BaseFragment {
                 .setSingleChoiceItems(recommend, Setting.getRecommend(), (dialog, which) -> {
                     mBinding.recommendText.setText(recommend[which]);
                     Setting.putRecommend(which);
+                    RefreshEvent.video();
                     dialog.dismiss();
                 }).show();
     }
