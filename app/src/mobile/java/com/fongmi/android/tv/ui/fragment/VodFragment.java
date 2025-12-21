@@ -152,6 +152,10 @@ public class VodFragment extends BaseFragment
             mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.link.setVisibility(View.VISIBLE);
             mBinding.filter.setVisibility(View.GONE);
+        } else if ("history".equals(mAdapter.get(position).getTypeId())) {
+            mBinding.top.setVisibility(View.INVISIBLE);
+            mBinding.filter.setVisibility(View.GONE);
+            mBinding.link.show();
         } else if (!mAdapter.get(position).getFilters().isEmpty()) {
             mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.link.setVisibility(View.GONE);

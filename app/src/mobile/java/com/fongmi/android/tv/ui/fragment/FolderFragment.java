@@ -61,7 +61,11 @@ public class FolderFragment extends BaseFragment {
     @Override
     protected void initView() {
         mType = getType();
-        getChildFragmentManager().beginTransaction().replace(R.id.container, TypeFragment.newInstance(getKey(), mType.getTypeId(), mType.getStyle(), mType.getExtend(true), mType.isFolder(), getY())).commit();
+        if ("history".equals(mType.getTypeId())) {
+            getChildFragmentManager().beginTransaction().replace(R.id.container, HistoryTabFragment.newInstance(getY())).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().replace(R.id.container, TypeFragment.newInstance(getKey(), mType.getTypeId(), mType.getStyle(), mType.getExtend(true), mType.isFolder(), getY())).commit();
+        }
     }
 
     public void openFolder(String typeId, HashMap<String, String> extend) {
@@ -78,7 +82,12 @@ public class FolderFragment extends BaseFragment {
     }
 
     public void scrollToTop() {
-        Optional.ofNullable(getChild()).ifPresent(TypeFragment::scrollToTop);
+        if ("history".equals(mType.getTypeId())) {
+            HistoryTabFragment historyFragment = (HistoryTabFragment) getChildFragmentManager().findFragmentById(R.id.container);
+            Optional.ofNullable(historyFragment).ifPresent(HistoryTabFragment::scrollToTop);
+        } else {
+            Optional.ofNullable(getChild()).ifPresent(TypeFragment::scrollToTop);
+        }
     }
 
     public void setFilter(String key, Value value) {

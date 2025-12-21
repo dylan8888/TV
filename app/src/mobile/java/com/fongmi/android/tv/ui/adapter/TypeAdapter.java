@@ -38,6 +38,13 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
         return type;
     }
 
+    private Class history() {
+        Class type = new Class();
+        type.setTypeName(ResUtil.getString(R.string.home_history));
+        type.setTypeId("history");
+        return type;
+    }
+
     public void clear() {
         mItems.clear();
         notifyDataSetChanged();
@@ -46,6 +53,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
     public void addAll(Result result) {
         mItems.addAll(result.getTypes());
         if (!result.getList().isEmpty() && Setting.getRecommend() == 0) mItems.add(0, home());
+        else if (Setting.getRecommend() == 1) mItems.add(0, history());
         if (!mItems.isEmpty()) mItems.get(0).setActivated(true);
         notifyDataSetChanged();
     }
